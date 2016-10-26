@@ -4,11 +4,11 @@
  */
 
 import java.io.*;
+import java.util.Date;
 
 public class RC4 {
-    private static final int LENGTH_OF_S = 255;
-    private static final int LENGTH_OF_K = 256;
-    private static final String KEY = "maple5233";
+    private static final int LENGTH_OF_S = 256;
+    private static final String KEY = "123";
     private static int[] S = new int[LENGTH_OF_S];// S盒子
 
     /***
@@ -38,32 +38,56 @@ public class RC4 {
         }
         /* S的初始置换 */
         for (int i = 0; i < LENGTH_OF_S; i++) {
-            j = (j + S[i] + T[i]) % LENGTH_OF_K;
+            j = (j + S[i] + T[i]) % LENGTH_OF_S;
             swap(S[i], S[j]);
         }
     }
 
     /***
-     * 加密和解密
+     * 加密和解密文本型文件
      *
      * @param P 密文或者明文
      * @return 明文或者密文
      */
-    private static String code(String P) {
+    private static String codeTheString(String P) {
         int i = 0, j = 0, l = 0, t = 0, tmp = 0;
         char k;
         StringBuilder K = new StringBuilder();
         while (l < P.length()) {
-            i = (i + 1) % LENGTH_OF_K;
-            j = (j + S[i]) % LENGTH_OF_K;
+            i = (i + 1) % LENGTH_OF_S;
+            j = (j + S[i]) % LENGTH_OF_S;
             swap(S[i], S[j]);
-            t = (S[i] + S[j]) % LENGTH_OF_K;
+            t = (S[i] + S[j]) % LENGTH_OF_S;
             tmp = (int) P.charAt(l) ^ S[t];
             k = (char) tmp;
             K.append(k);
             l++;
         }
         return K.toString();
+    }
+
+    /***
+     * 加密和解密二进制文件
+     *
+     * @param P 密文或者明文
+     * @return 明文或者密文
+     */
+    private static String codeTheFile(String P) {
+        int i = 0, j = 0, l = 0;
+        int t;
+        byte tmp;
+        byte[] p = P.getBytes();
+        byte[] k = new byte[p.length];
+        while (l < p.length) {
+            i = (i + 1) % LENGTH_OF_S;
+            j = (j + S[i]) % LENGTH_OF_S;
+            swap(S[i], S[j]);
+            t = (S[i] + S[j]) % LENGTH_OF_S;
+            tmp = (byte) (P.charAt(l) ^ S[t]);
+            k[l] = tmp;
+            l++;
+        }
+        return new String(k);
     }
 
     /***
@@ -116,25 +140,35 @@ public class RC4 {
             BufferedWriter ppWriter = new BufferedWriter(new FileWriter(__file)); //密文输出字节流
             StringBuilder fileBufferP = new StringBuilder();
             StringBuilder fileBufferPP = new StringBuilder();
+
             /* 加密过程 */
             int c;
             while ((c = pReader.read()) != -1) {
                 fileBufferP.append((char) c);
             }
-            String M = code(fileBufferP.toString()); // 生成密文
+            long beginOfEncode = new Date().getTime();
+            String M = codeTheString(fileBufferP.toString()); // 生成密文
+            long endOfEncode = new Date().getTime();
             mWriter.write(M); // 写入密文文件
             mWriter.flush();
             mWriter.close();
+
             /* 解密过程 */
             while ((c = mReader.read()) != -1) {
                 fileBufferPP.append((char) c);
             }
-            String P = code(fileBufferPP.toString()); // 生成明文
+            long beginOfDecode = new Date().getTime();
+            String P = codeTheString(fileBufferPP.toString()); // 生成明文
+            long endOfDecode = new Date().getTime();
             ppWriter.write(P); // 写入解密文件
             ppWriter.flush();
+
             ppWriter.close();
             pReader.close();
             mReader.close();
+
+            System.out.println("加密共消耗" + (double)(endOfEncode-beginOfEncode)/1000.0 + "s.");
+            System.out.println("解密共消耗" + (double)(endOfDecode-beginOfDecode)/1000.0 + "s.");
         } catch (IOException e) {
             e.printStackTrace();
         }
