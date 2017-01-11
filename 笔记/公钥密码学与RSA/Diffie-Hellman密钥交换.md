@@ -47,7 +47,7 @@
 2. 爱丽丝选择一个随机自然数 *a* 并且将${\displaystyle g^{a}{\bmod {p}}}$发送给鲍伯。
 3. 鲍伯选择一个随机自然数 *b* 并且将${\displaystyle g^{b}{\bmod {p}}}$发送给爱丽丝。
 4. 爱丽丝 计算${\displaystyle \left(g^{b}\right)^{a}{\bmod {p}}}$。
-5. 鲍伯 计算${\displaystyle \left(g^{a}\right)^{b}{\bmod {p}}}$。]
+5. 鲍伯 计算${\displaystyle \left(g^{a}\right)^{b}{\bmod {p}}}$。
 
 ## 安全性
 

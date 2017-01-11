@@ -24,7 +24,7 @@
 
 1. 他使用起先与Alice约好的格式将${\displaystyle m}$转换为一个小于${\displaystyle N}$，且与${\displaystyle N}$互质的整数${\displaystyle n}$，比如他可以将每一个字转换为这个字的Unicode码，然后将这些数字连在一起组成一个数字。假如他的信息非常长的话，他可以将这个信息分为几段，然后将每一段转换为${\displaystyle n}$。
 2. 用这个公式他可以将${\displaystyle n}$加密为${\displaystyle c}$： $$n^e \equiv c\ (\mathrm{mod}\ N) $$
-3. Bob算出{\displaystyle c}![c](https://wikimedia.org/api/rest_v1/media/math/render/svg/86a67b81c2de995bd608d5b2df50cd8cd7d92455)后就可以将它传递给Alice。
+3. Bob算出${\displaystyle c}$后就可以将它传递给Alice。
 
 ### 解密消息
 
@@ -44,6 +44,7 @@ Alice得到Bob的消息$c$后就可以利用她的密钥$d$来解码。
    $$
    {\displaystyle n{ed}=n{1+h\varphi (N)}=n\left(n^{\varphi (N)}\right)^{h}\equiv n(1)^{h}{\pmod {N}}\equiv n{\pmod {N}}}
    $$
+
 
 
 ## 签名消息
